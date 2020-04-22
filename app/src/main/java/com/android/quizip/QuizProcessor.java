@@ -3,6 +3,8 @@ package com.android.quizip;
 
 
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
@@ -11,28 +13,12 @@ public class QuizProcessor {
     private ArrayList<TrueFalse> trueFalse = new ArrayList<>();
     private ArrayList<Matching> matching = new ArrayList<>();
     private ArrayList<MultipleChoice> multipleChoice = new ArrayList<>();
-    private QParser parser;
     private ArrayList<Question> mixed = new ArrayList<>();
     private int counter = 0;
 
 
-    public QuizProcessor(String fileName) {
+    public QuizProcessor() {
 
-        parser = new QParser(fileName);
-        parser.parseTrueFalse();
-        parser.parseMatching();
-        parser.parseMultipleChoice();
-
-        if (!trueFalse.isEmpty()) {
-            mixed.addAll(trueFalse);
-        }
-        if (!matching.isEmpty()) {
-            mixed.addAll(matching);
-        }
-        if (!multipleChoice.isEmpty()) {
-            mixed.addAll(multipleChoice);
-        }
-        Collections.shuffle(mixed);
     }
 
     public Question getQuestion() {
@@ -49,19 +35,54 @@ public class QuizProcessor {
         counter = 0;
     }
 
-    public QParser getQParser(){
-        return parser;
-    }
 
     public void setTrueFalse(ArrayList<TrueFalse> trueFalse){
-        this.trueFalse = trueFalse;
+        for (int i = 0; i < trueFalse.size(); i++){
+            this.trueFalse.add(trueFalse.get(i));
+        }
+        if (!this.trueFalse.isEmpty()){
+            Log.e("TAG", "Successfully wrote to true false in quiz processor");
+        }
     }
+
     public void setMatching(ArrayList<Matching> matching){
-        this.matching = matching;
+        for (int i = 0; i < matching.size(); i++){
+            this.matching.add(matching.get(i));
+        }
+        if (!this.matching.isEmpty()){
+            Log.e("TAG", "Successfully wrote to matching in quiz processor");
+        }
     }
 
     public void setMultipleChoice(ArrayList<MultipleChoice> multipleChoice){
-        this.multipleChoice = multipleChoice;
+        for (int i = 0; i < multipleChoice.size(); i++){
+            this.multipleChoice.add(multipleChoice.get(i));
+        }
+        if (!this.multipleChoice.isEmpty()){
+            Log.e("TAG", "Successfully wrote to multiple choice in quiz processor");
+        }
+    }
+
+    public void createQuiz(){
+        QuizHost.getQParser().parseTrueFalse();
+        QuizHost.getQParser().parseMatching();
+        QuizHost.getQParser().parseMultipleChoice();
+
+           for (int i = 0; i < trueFalse.size(); i++) {
+               mixed.add(trueFalse.get(i));
+           }
+
+        for (int i = 0; i < matching.size(); i++) {
+            mixed.add(matching.get(i));
+        }
+        for (int i = 0; i < multipleChoice.size(); i++) {
+            mixed.add(multipleChoice.get(i));
+        }
+        Collections.shuffle(mixed);
+    }
+
+    public ArrayList<Question> getMixed(){
+        return mixed;
     }
 
     public boolean checkAnswer(String userAnswer, Question question) {
@@ -90,7 +111,6 @@ public class QuizProcessor {
             }
             return false;
         } else {
-            System.out.println("something went wrong - returning false");
             return false;
         }
     }

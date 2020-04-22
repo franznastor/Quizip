@@ -1,5 +1,6 @@
 package com.android.quizip;
 
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,11 +25,10 @@ public class QParser {
     FirebaseFirestore fStore;
     FirebaseAuth fAuth;
 
-    QParser(String fileName) {
-    this.fileName = fileName;
+   public QParser() {
     fStore = FirebaseFirestore.getInstance();
     fAuth = FirebaseAuth.getInstance();
-    documentReference = fStore.collection("users").document(fAuth.getCurrentUser().getUid()).collection("quizzes").document(fileName);
+
     }
 
     public void parseTrueFalse() {
@@ -36,20 +36,30 @@ public class QParser {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 Map<String, String> tempMap;
-                ArrayList<TrueFalse> trueFalse = new ArrayList<>();
+
                 if (task.isSuccessful()){
+
                     tempMap = (Map<String, String>) task.getResult().get("trueFalse");
+                    ArrayList<TrueFalse> trueFalse = new ArrayList<>();
                     for (Map.Entry<String, String> entry : tempMap.entrySet()) {
                         trueFalse.add(new TrueFalse(entry.getKey(), entry.getValue()));
                     }
-                    QuizHost.getQuizProcessor().setTrueFalse(trueFalse);
+                    if (!trueFalse.isEmpty()) {
+                        Log.e("TAG" , "succesfully wrote true false");
+                        QuizHost.getQuizProcessor().setTrueFalse(trueFalse);
+                    }
+                    else Log.e("TAG", "truefalse is empty at QParser");
                 }
             }
         });
     }
 
+    public void setFileName(String fileName){
+        this.fileName = fileName;
+        documentReference = fStore.collection("users").document(fAuth.getCurrentUser().getUid()).collection("quizzes").document(this.fileName);
 
-//TODO figure out how to read the sub collection in the document. Currently only returns the top level query
+}
+
     public void parseMatching() {
         documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -61,26 +71,33 @@ public class QParser {
                    for (Map.Entry<String, Map<String, String>> set : tempMap.entrySet()) {
                        matching.add(new Matching(set.getKey(), set.getValue()));
                    }
-                   QuizHost.getQuizProcessor().setMatching(matching);
+                   if (!matching.isEmpty()) {
+                       Log.e("TAG" , "succesfully wrote matching");
+                       QuizHost.getQuizProcessor().setMatching(matching);
+                   }
+                   else Log.e("TAG", "matching is empty");
                }
            }
        });
     }
 
-    //TODO figure out how to read the sub collection in the document. Currently only returns the top level query
+
     public void parseMultipleChoice() {
         documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 Map<String, Map<String, String>> tempMap;
                 ArrayList<MultipleChoice> multipleChoice = new ArrayList<>();
-                if (task.isSuccessful()){
+                if (task.isSuccessful()) {
                     tempMap = (Map<String, Map<String, String>>) task.getResult().get("multipleChoice");
                     for (Map.Entry<String, Map<String, String>> set : tempMap.entrySet()) {
                         multipleChoice.add(new MultipleChoice(set.getKey(), set.getValue()));
                     }
-                    QuizHost.getQuizProcessor().setMultipleChoice(multipleChoice);
-                }
+                    if (!multipleChoice.isEmpty()) {
+                        Log.e("TAG" , "succesfully wrote multiple choice");
+                        QuizHost.getQuizProcessor().setMultipleChoice(multipleChoice);
+                    }
+                }   else Log.e("TAG", "Multiple choice is empty");
             }
         });
 }

@@ -39,6 +39,8 @@ public class LoginActivity extends AppCompatActivity {
         mCreateBtn = findViewById(R.id.registerButton);
 
         if(fAuth.getCurrentUser() != null){
+            QuizHost.setQuizProcessor(new QuizProcessor());
+            QuizHost.setQParser(new QParser());
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
             finish();
         }
@@ -70,6 +72,8 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
+                           QuizHost.setQuizProcessor(new QuizProcessor());
+                           QuizHost.setQParser(new QParser());
                             Toast.makeText(LoginActivity.this, "Logged in successfully.", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
                             finish();

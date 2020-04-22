@@ -18,8 +18,7 @@ public class MultipleChoiceTakeQuizActivity extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                QuizHost.getNextQuestion(MultipleChoiceTakeQuizActivity.this);
-                finish();
+                QuizHost.getNextQuestion(MultipleChoiceTakeQuizActivity.this.getApplicationContext());
             }
         });
     }

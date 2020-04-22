@@ -48,7 +48,7 @@ public class HostQuizActivity extends AppCompatActivity {
         hostQuiz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                QuizHost.setQuizProcessor(new QuizProcessor(textView.getText().toString()));
+                QuizHost.getQuizProcessor().createQuiz();
                 startActivity(new Intent(getApplicationContext(), HostSettingsActivity.class));
                 finish();
 
@@ -75,7 +75,13 @@ public class HostQuizActivity extends AppCompatActivity {
                     quizList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            textView.setText(quizList.getItemAtPosition(i).toString());
+                            String selectedTest = quizList.getItemAtPosition(i).toString();
+                            textView.setText(selectedTest);
+                            if (!selectedTest.isEmpty()) {
+                                QuizHost.getQParser().setFileName(selectedTest);
+
+                            }
+                            else Log.e("TAG", "fileName is Empty");
                         }
                     });
 

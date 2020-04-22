@@ -65,10 +65,12 @@ public class Matching implements Question {
     public String toString(){
         String formatted = statement + ": ";
 
-       statement.concat(matchingKey.get(0) + " ");
-
-       statement.concat(answers.get(0) + " ");
-
+        for (String temp : matchingKey) {
+            formatted.concat(temp + " ");
+        }
+        for (String temp : answers) {
+            formatted.concat(temp + " ");
+        }
         return formatted;
     }
 }

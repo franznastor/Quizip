@@ -65,25 +65,26 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-/*        fStore = FirebaseFirestore.getInstance();
+        fStore = FirebaseFirestore.getInstance();
         fAuth = FirebaseAuth.getInstance();
         documentReference = fStore.collection("users").document(fAuth.getCurrentUser().getUid()).collection("quizzes").document("test quiz");
 
         documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                Map<String,String> test;
+                Map<String, Map<String, String>> tempMap;
+                ArrayList<Matching> matching = new ArrayList<>();
                 if (task.isSuccessful()){
-                    test = (Map<String, String>) task.getResult().get("trueFalse");
+                    tempMap = (Map<String, Map<String, String>>) task.getResult().get("matching");
                     TextView testView = findViewById(R.id.testView);
-                    for (Map.Entry<String, String> set : test.entrySet()) {
-                        TrueFalse temp = new TrueFalse(set.getKey(), set.getValue());
-                        testView.append(temp.toString());
+                    for (Map.Entry<String, Map<String, String>> set : tempMap.entrySet()) {
+                        matching.add(new Matching(set.getKey(), set.getValue()));
+                        testView.append(tempMap.toString());
                     }
                 }
            }
         });
-*/
+
     }
 
 }

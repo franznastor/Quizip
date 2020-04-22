@@ -35,6 +35,14 @@ public class MultipleChoice implements Question {
         Collections.shuffle(answerStrings);
         return answerStrings;
     }
+    @Override
+    public String toString(){
+        String formatted = question + ": ";
+
+        formatted.concat(answers.get(0) + " ");
+
+        return formatted;
+    }
 
     @Override
     public ArrayList<Map.Entry<String, String>> getAnswers() {

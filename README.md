@@ -12,7 +12,7 @@ Our Quizip Android App is a triva application that allows its user to create and
 ### Prerequisites
 Before you continue, make sure you have met the follow requirements:
  
-* The lastest version of Android Studio must be downloaded 
+* The lastest version of Android Studio 3.6.3 must be downloaded.
 
 ### Getting Started
 Running the project:
@@ -29,6 +29,8 @@ Running the project:
 11. Select a hardware profile then click Next
 12. Select the system image for a particular API then click Next
 13. Change AVD properties then click Finish
-13. If all previous steps have been completed Click run
+    For further assitance on how to create AVD to use the Android Emulator, please refer to this link below:  
+    https://developers.foxitsoftware.com/kb/article/create-an-emulator-for-testing-in-android-studio/
+14. If all previous steps have been completed Click run
 
 
